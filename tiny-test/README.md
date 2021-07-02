@@ -1,123 +1,97 @@
-[![CRAN](http://www.r-pkg.org/badges/version/tinytest)](http://cran.r-project.org/package=tinytest/)
-[![status](https://tinyverse.netlify.com/badge/tinytest)](https://CRAN.R-project.org/package=tinytest)
-[![Downloads](http://cranlogs.r-pkg.org/badges/tinytest)](http://cran.r-project.org/package=tinytest/)
+Tiniest JavaScript unit testing library
+=======================================
 
+This is an in-browser JavaScript library I've been using for years. It's so small and simple that it never occured to me to open source it until I saw all the overly complicated alternatives that are out there.
 
-# tinytest
-A lightweight, no-dependency, full-featured package for unit testing
+If you're looking for a JavaScript library full of features or install guides that say things like `grunt`, `npm` or `bower`, you've come to the wrong place. Sorry, this probably isn't for you. Move along now.
 
-[Overview of functionality](pkg/README.md)
+If you're looking for a quick way to unit-test a JavaScript function/object in a web-page and don't want to get bogged down in frameworks, you've come to the right place. Take a seat... no scratch that, you'll have everything you need in a few seconds so you may as well remain standing.
 
+*   [Download tinytest.js](https://rawgit.com/joewalnes/jstinytest/master/tinytest.js)
+*   [Example](https://github.com/joewalnes/jstinytest/tree/master/example)
 
-## Installing tinytest
+10 second tutorial
+------------------
 
-### From CRAN
+Download [tinytest.js](https://rawgit.com/joewalnes/jstinytest/master/tinytest.js) and put it somewhere in your web directory.
 
-In `R`, do
-```r
-install.packages("tinytest")
+Let's say you have a function in `adder.js`:
+
+```javascript
+function add(a, b) {
+  return a + b;
+}
 ```
 
-### From GitHub
+Create a test page called `adder-test.html` (you can name it anything). This includes your code under test, tinytest.js and defines your tests:
 
-In your (bash) shell, do
+```html
+<script src="tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+ tests({
 
-```bash
-git clone https://github.com/markvanderloo/tinytest
-cd tinytest
-make install
+   'adds numbers': function() {
+     eq(6, add(2, 4));
+     eq(6.4, add(2.4, 4));
+   },
+
+   'subtracts numbers': function() {
+     eq(-2, add(2, -4)); 
+   },
+
+ });
+</script>
 ```
 
-![onwards to the tinyverse](watch/growth.png)
+Open the page in your browser. Green is good. Red is bad. If it's red, look in the JavaScript console for messages.
 
-## tinytest philosophy.
+![](https://github.com/joewalnes/jstinytest/raw/master/screenshots/results-green.png)
 
-### Testing should be as easy as possible. 
+**That's it!**
 
-Testing infrastructure must not get in the way of the developer. Setting up
-tests should be done with ease. In `tinytest` tests are simple R-scripts
-where test statements can be interspersed with other code (e.g. to prepare
-some results for testing).
+Don't believe me? Here's the [source](https://github.com/joewalnes/jstinytest/tree/master/example) and [result](https://rawgit.com/joewalnes/jstinytest/master/example/adder-test.html).
 
+What else?
+==========
 
-### Test results are data
+If your tests fail, you'll get stack traces:
 
+![](https://github.com/joewalnes/jstinytest/raw/master/screenshots/results-red.png)
 
-The purpose of testing is to  gather evidence (data) that builds confidence in
-the quality of software. Unit tests consist of expressions where an expected
-result is compared with the result of a program or function. For example:
+Function reference
+------------------
 
-```r
-addOne <- function(x) x + 1
-subOne <- function(x) x - 2
+```javascript
+// Force a failure
+fail(reason);
 
-# this test should pass
-tinytest::expect_equal(addOne(1), 2 )
+// Assert expression is truthy (fail with reason)
+assert(expression, reason);
 
-# this test will fail
-tinytest::expect_equal(subOne(2), 1 ) 
+// Assert expected == actual
+assertEquals(expected, actual)
+eq(expected, actual) // Alias for assertEquals
+
+// Assert expected === actual
+assertStrictEquals(expected, actual)
 ```
 
-Some unit testing frameworks for R throw a formal exception (error) whenever a
-test fails. There are several reasons why this is not a good idea.
+Errm that's it. Now stop wasting time - go test that function.
 
-1. You do not need to throw an error to discover that a test has failed. A boolean
-result is in principle enough.
-2. A [traceback](https://www.rdocumentation.org/packages/base/versions/3.5.2/topics/traceback)
-of the error does not give you any information on the cause of the test
-failure. This is because the test function throws the error, not the tested
-code.
-3. Throwing errors complicates the code needed for developing a testing suite,
-making testing suites harder to maintain and possibly more complex to use than
-necessary.
+But, but, but. What about feature X?
+------------------------------------
 
-`tinytest` therefore treats test results as data, not as exceptions. This data
-can be summarized and investigated by any method you already know in R.
+It probably doesn't have it. If you need that, you'll probably find it in one of the many more sophisticated frameworks out there. A more detailed discussion can be found [here](http://www.pinterest.com/pin/61431982391077742/).
 
-### Error on deploy
+Projects using TinyTest
+-----------------------
 
-There is a case where the failure of a test should cause an error, namely when
-testing for deployment (e.g. publishing a package on CRAN). Therefore, when
-running `R CMD check`, an error will be thrown if a test has failed. This way
-the error interrupts the _deployment_ process instead of the _testing_ process.
+*   [Filtrex](https://github.com/joewalnes/filtrex) - A simple, safe, JavaScript Filter Expression compiler ([Tests](https://github.com/joewalnes/filtrex/blob/master/test/filtrex-test.html)) ([Results](https://rawgit.com/joewalnes/filtrex/master/test/filtrex-test.html))
 
+Other stuff
+-----------
 
-### Run all tests
+I also have [TinyTest for C](https://github.com/joewalnes/tinytest) that follows similar principles of simplicity.
 
-By default all tests are run and the results are summarized to one line of
-output per failed test.
-
-### Tests are installed with the package
-
-So a package author can request test results from users that installed the package.
-
-
-### Show you what you need
-
-Developing and debugging takes focus and often deep concentration. `tinytest`
-supports your workflow by directing you as quickly as possible
-to the source of the test failure. In a single line of output you get the
-test result, the file and location in the file, and the test call that failed.
-Of course, printing is configurable through options.
-
-### Light weight is the right weight
-
-Keep it simple, keep it clean. See  [tinyverse.org](http://www.tinyverse.org).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Now check out my other [GitHub projects](https://github.com/joewalnes) and follow [@joewalnes](https://twitter.com/joewalnes) on that Twitter thing.

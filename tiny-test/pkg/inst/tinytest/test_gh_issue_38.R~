@@ -1,5 +1,0 @@
-# failing test will signal that run_test_dir runs this file
-
-expect_true(FALSE, info="This file should not run")
-
-
