@@ -50,3 +50,26 @@ export const rIC =
 export const cIC =
 	//@ts-expect-error
 	self.cancelIdleCallback || ((/** @type {number} */ e) => clearTimeout(e));
+
+/**
+ * Extend the base Event Object to make your own custom event
+ * @param {string} type
+ * @param {Event} originalEvent?
+ * @param {object} detail?
+ * @returns {CustomEvent}
+ */
+export const extendEvent = (type, originalEvent = null, detail = {}) => {
+	if (originalEvent !== null) Object.assign(detail, { originalEvent });
+	const { bubbles, cancelable, composed } = originalEvent || {
+		bubbles: true,
+		cancelable: true,
+		composed: true,
+	};
+
+	return new CustomEvent(type, {
+		bubbles,
+		cancelable,
+		composed,
+		detail,
+	});
+};

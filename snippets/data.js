@@ -36,3 +36,16 @@ const handler = {
  * @returns {ProxyHandler<object, handler>}
  */
 export const Enum = (enumObject) => new Proxy(enumObject, handler);
+
+/**
+ * a non CSPRNG random number generator
+ * @param {number} a - the length of the returned id
+ * @param {number} b? - the length of the Int8Array
+ * @returns {string}
+ */
+export const randid = (a, b = 9) =>
+	crypto
+		.getRandomValues(new Int8Array(b))
+		.map(Math.abs)
+		.join('')
+		.substr(0, a);
