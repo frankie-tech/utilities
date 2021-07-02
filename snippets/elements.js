@@ -20,3 +20,33 @@ export const getOptionsFromDataset = (element, prefix) => (
 		).filter((v) => v),
 	)
 );
+
+export const fixRelOpener = () =>
+	requestAnimationFrame((e) =>
+		document
+			.querySelectorAll('a[target=_blank]:not([rel*=noopener])')
+			.forEach((e) => {
+				e.setAttribute('rel', e.getAttribute('rel') + ' noopener');
+			}),
+	);
+
+export const rIC =
+	// @ts-expect-error
+	self.requestIdleCallback ||
+	((
+		/** @type {(callbackArguments: { didTimeout: boolean; timeRemaining: (e: undefined) => number; }) => any} */ callback,
+		start = +new Date(),
+	) =>
+		setTimeout(
+			/** @param {undefined} l */ (l) =>
+				callback({
+					didTimeout: !1,
+					timeRemaining: /** @param {undefined} e */ (e) =>
+						Math.max(0, 50 - (+new Date() - start)),
+				}),
+			1,
+		));
+
+export const cIC =
+	//@ts-expect-error
+	self.cancelIdleCallback || ((/** @type {number} */ e) => clearTimeout(e));
