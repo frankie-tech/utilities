@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * @param {HTMLElement} element
  * @param {string} [prefix]
