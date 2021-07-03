@@ -58,15 +58,15 @@ export const run = (tests) => {
 	}
 	requestAnimationFrame(
 		() =>
-			(document.body.style.backgroundColor =
-				failures == 0 ? '#99ff99' : '#ff9999'),
+		(document.body.style.backgroundColor =
+			failures == 0 ? '#99ff99' : '#ff9999'),
 	);
 };
 
 /**
  * @param {string} msg
  */
-export const fail = (msg) => {
+export const fail = msg => {
 	throw new Error('fail(): ' + msg);
 };
 

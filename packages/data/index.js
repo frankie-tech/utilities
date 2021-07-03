@@ -1,4 +1,11 @@
 // @ts-check
+/**
+ * Get true type of an object/variable
+ * @param {unknown} v 
+ * @returns {string}
+ */
+export const trueTypeOf = v => Object.prototype.toString.call(v).slice(8, -1);
+
 
 const handler = {
 	/**
