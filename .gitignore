@@ -1,3 +1,15 @@
 node_modules
 dist/
 yarn.lock
+
+# Don't store to git
+# And use the pattern that matches
+# the Zero-Installs Yarn 2 guide
+# Article: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
