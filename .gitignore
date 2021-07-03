@@ -1,6 +1,5 @@
 node_modules
 dist/
-yarn.lock
 
 # Don't store to git
 # And use the pattern that matches
